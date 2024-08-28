@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Employees</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcnameslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <style>
+        .gradient-custom {
+            background: #4602ff;
+            background: -webkit-linear-gradient(to bottom right, rgb(40, 59, 237), rgba(245, 87, 108, 1));
+            background: linear-gradient(to bottom right, rgb(4, 46, 255), rgb(115, 156, 245));
+        }
+        .card-registration .select-input.form-control[readonly]:not([disabled]) {
+            font-size: 1rem;
+            line-height: 2.15;
+            padding-left: .75em;
+            padding-right: .75em;
+        }
+        .card-registration .select-arrow {
+            top: 13px;
+        }
+    </style>
+</head>
+<body>
+    {{>navbar}}
+    <section class="vh-100 gradient-custom">
+        <div class="container py-5 h-100">
+            <div class="row h-100 w-100">
+                <div class="col-12 col-lg-9 col-xl-7 w-100">
+                    <div class="card shadow-2-strong card-registration w-100" style="border-radius: 15px;">
+                        <div class="card-body p-4 p-md-5">
+                            <div class="w-100 d-flex justify-content-center mb-4 col-sm-12">
+                                <div class="row w-100">
+                                    <div class="col-sm-8">
+                                        <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">All Employees</h3>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <input type="text" id="employeeSearch" class="form-control text-center" placeholder="Search Employees" onkeyup="searchEmployees()">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="w-100 d-flex justify-content-center">
+                                <table class="table table-striped border text-center">
+                                    <thead>
+                                        <tr>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Gender</th>
+                                            <th>Department</th>
+                                            <th>Edit</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="employeeTable">
+                                        {{#each employees}}
+                                        <tr>
+                                            <td>{{this.fname}}</td>
+                                            <td>{{this.lname}}</td>
+                                            <td>{{this.gender}}</td>
+                                            <td>{{this.department}}</td>
+                                            <td><a href="/emp/update/{{this._id}}" class="btn btn-warning btn-sm">Update</a></td>
+                                            <td><a href="/emp/delete/{{this._id}}" class="btn btn-danger btn-sm">Delete</a></td>
+                                        </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function searchEmployees() {
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("employeeSearch");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("employeeTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td");
+                let rowContainsFilter = false;
+                for (let j = 0; j < td.length; j++) {
+                    if (td[j]) {
+                        txtValue = td[j].textContent || td[j].innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            rowContainsFilter = true;
+                            break;
+                        }
+                    }
+                }
+                tr[i].style.display = rowContainsFilter ? "" : "none";
+            }
+        }
+    </script>
+</body>
+</html>
